@@ -3,10 +3,12 @@
 
 const int ultrasonicRX = 4;
 const int ultrasonicTX = 3;
-const int reedSwitch = A0;
 const int missionCircuit = 12;
 
 Sensors::Sensors() {
+	pinMode(ultrasonicTX, OUTPUT);
+	pinMode(ultrasonicRX, INPUT);
+	pinMode(missionCircuit, INPUT);
 }
 
 float Sensors::getUltrasonic() {
@@ -19,7 +21,7 @@ float Sensors::getUltrasonic() {
 }
 
 bool Sensors::getReed() {
-	return digitalRead(reedSwitch);
+	return digitalRead(A0);
 }
 
 bool Sensors::dutyCircuitReady() {

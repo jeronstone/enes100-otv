@@ -7,10 +7,18 @@ class MissionHelper
 {
 public:
 	MissionHelper();
+	bool start();
 	void sendDutyCycle(int dutyCycle);
 	void sendMagnetic(bool magnetic);
-	int * updateCurrLocation();
+	void updateCurrLocation();
+	int getX();
+	int getY();
+	int getTheta();
 private:
+	const static int arucoID;
+	const static int wifiRX;
+	const static int wifiTX;
+	int loc[3];
 };
 
 #endif
