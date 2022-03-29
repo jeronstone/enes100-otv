@@ -12,10 +12,9 @@ public:
 	bool dutyCircuitReady();
 	float readDutyCycle();
 private:
-	const int ultrasonicRX;
-	const int ultrasonicTX;
-	const int reedSwitch;
-	const int missionCircuit;
+	const int ultrasonicRX = 4;
+	const int ultrasonicTX = 3;
+	const int missionCircuit = 12;
 };
 
 #endif

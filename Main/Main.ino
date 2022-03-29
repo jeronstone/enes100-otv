@@ -11,8 +11,18 @@ Sensors sensors;
 void setup() {
   //mission.start();
   //mission.updateCurrLocation();
+  armServo.begin();
 }
 
 void loop() {
-  
+  //testServo();
+}
+
+void testServo() {
+  armServo.runServoCCW();
+  delay(2000);
+  armServo.runServoCW();
+  delay(2000);
+  armServo.stopServoRotation();
+  delay(2000);
 }
