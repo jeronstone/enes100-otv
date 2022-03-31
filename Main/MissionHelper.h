@@ -10,15 +10,14 @@ public:
 	bool start();
 	void sendDutyCycle(int dutyCycle);
 	void sendMagnetic(bool magnetic);
-	void updateCurrLocation();
-	int getX();
-	int getY();
-	int getTheta();
+	bool updateCurrLocation();
+	float getX();
+	float getY();
+	float getTheta();
 private:
-	const static int arucoID;
-	const static int wifiRX;
-	const static int wifiTX;
-	int loc[3];
+	const static int wifiRX = 8;
+	const static int wifiTX = 9;
+	const static int arucoID = 6;
 };
 
 #endif

@@ -20,15 +20,15 @@ public:
 	void turnRight(int theta);
 	void turnAround();
 private:
-	const int HBENA;
-	const int HBENB;
-	const int HBADir1;
-	const int HBBDir1;
-	const int HBADir2;
-	const int HBBDir2;
-	const int defaultPropSpeed;
-	const int turnSpeed;
-	const float thetaBuffer;
+	const int HBENA = 10;
+	const int HBENB = 11;
+	const int HBADir1 = 7;
+	const int HBBDir1 = 2;
+	const int HBADir2 = 6;
+	const int HBBDir2 = 13;
+	const int defaultPropSpeed = 200;
+	const int turnSpeed = 100;
+	const float thetaBuffer = 0.2618;
 	MissionHelper _mission;
 	int degToRad(int deg);
 };

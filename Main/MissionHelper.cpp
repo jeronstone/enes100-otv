@@ -4,15 +4,13 @@
 
 const static int wifiRX = 8;
 const static int wifiTX = 9;
-const static int arucoID = 1;
-
-int loc[3];
+const static int arucoID = 6;
 
 MissionHelper::MissionHelper() {
 }
 
 bool MissionHelper::start() {
-	Enes100.begin("Interstellar", DATA, arucoID, wifiRX, wifiTX);
+	return Enes100.begin("Interstellar", DATA, arucoID, wifiTX, wifiRX);
 }
 
 void MissionHelper::sendDutyCycle(int dutyCycle) {
@@ -23,24 +21,21 @@ void MissionHelper::sendMagnetic(bool magnetic) {
 	Enes100.mission(MAGNETISM, (magnetic) ? MAGNETIC : NOT_MAGNETIC);
 }
 
-void MissionHelper::updateCurrLocation() {
-	if (Enes100.updateLocation()) {
-		loc[0] = Enes100.location.x;
-    	loc[1] = Enes100.location.y; 
-    	loc[2] = Enes100.location.theta; 
-	}
-
-	return loc;
+bool MissionHelper::updateCurrLocation() {
+	return Enes100.updateLocation();
 }
 
-int MissionHelper::getX() {
-	return loc[0];
+float MissionHelper::getX() {
+	updateCurrLocation();
+	return Enes100.location.x;
 }
 
-int MissionHelper::getY() {
-	return loc[1];
+float MissionHelper::getY() {
+	updateCurrLocation();
+	return Enes100.location.y;
 }
 
-int MissionHelper::getTheta() {
-	return loc[2];
+float MissionHelper::getTheta() {
+	updateCurrLocation();
+	return Enes100.location.theta;
 }
