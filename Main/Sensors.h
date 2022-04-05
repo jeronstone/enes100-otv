@@ -9,6 +9,7 @@ public:
 	Sensors();
 	float getUltrasonic();
 	bool getReed();
+	bool getHallEff();
 	bool dutyCircuitReady();
 	float readDutyCycle();
 private:

@@ -24,13 +24,17 @@ bool Sensors::getReed() {
 	return digitalRead(A0);
 }
 
+bool Sensors::getHallEff() {
+	return !digitalRead(A0);
+}
+
 bool Sensors::dutyCircuitReady() {
 	return (pulseIn(missionCircuit, HIGH) == 0); // could be a yikes 
 }
 
 float Sensors::readDutyCycle() {
-	int high = pulseIn(missionCircuit, HIGH);
-	int low = pulseIn(missionCircuit, LOW);
-	int time = high + low;
-	return ((float) high)/((float) time);
+	float high = pulseIn(missionCircuit, HIGH);
+	float low = pulseIn(missionCircuit, LOW);
+	float time = high + low;
+	return (high/time) * 100.0;
 }

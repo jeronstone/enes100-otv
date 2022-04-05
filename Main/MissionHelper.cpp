@@ -26,16 +26,22 @@ bool MissionHelper::updateCurrLocation() {
 }
 
 float MissionHelper::getX() {
-	updateCurrLocation();
+	if(!updateCurrLocation()) {
+    Serial.println("Xsadge");
+  }
 	return Enes100.location.x;
 }
 
 float MissionHelper::getY() {
-	updateCurrLocation();
+	if(!updateCurrLocation()) {
+    Serial.println("Ysadge");
+	}
 	return Enes100.location.y;
 }
 
 float MissionHelper::getTheta() {
-	updateCurrLocation();
+	if(!updateCurrLocation()) {
+    Serial.println("Tsadge");
+  }
 	return Enes100.location.theta;
 }

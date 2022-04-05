@@ -12,8 +12,8 @@ Sensors sensors;
 void setup() {
   Serial.begin(9600);
   
-  Serial.println("Start Status: " + mission.start());
-  Serial.println("Init loc update: " + mission.updateCurrLocation());
+  //Serial.println("Start Status: " + mission.start());
+  //Serial.println("Init loc update: " + mission.updateCurrLocation());
   //armServo.begin();
 }
 
@@ -21,14 +21,27 @@ void loop() {
   //testServo();
   //testUS();
   //testProp();
-  testWifi();
+  //testWifi();
+  //testHall();
+  testDuty();
+  delay(1000);
+}
+
+void testDuty() {
+  Serial.println(sensors.readDutyCycle());
+}
+
+void testHall() {
+  Serial.println(sensors.getHallEff());
 }
 
 void testWifi() {
-  Serial.println("X loc: " + mission.getX());
-  Serial.println("Y loc: " + mission.getY());
-  Serial.println("T loc: " + mission.getTheta());
-  Serial.println(getX());
+  String x = String(mission.getX(), 3);
+  Serial.println("X loc: " + x);
+  String y = String(mission.getY(), 3);
+  Serial.println("Y loc: " + y);
+  String t = String(mission.getTheta(), 3);
+  Serial.println("T loc: " + t);
   delay(500);
   
 }
