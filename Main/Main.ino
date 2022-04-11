@@ -21,10 +21,24 @@ void loop() {
   //testServo();
   //testUS();
   //testProp();
-  //testWifi();
-  //testHall();
-  testDuty();
+  //testWifiRX();
+  //delay(500);
+  //testWifiTX();
+  //delay(500);
+  testHall();
+  //testDuty();
+  //delay(1000);
+  //testNoVSTurn();
+}
+
+void testNoVSTurn() {
+  propulsion.turn90NoVS(1);
   delay(1000);
+  propulsion.turn90NoVS(0);
+  delay(1000);
+  propulsion.turn90NoVS(1);
+  delay(1000);
+  while(1);
 }
 
 void testDuty() {
@@ -35,24 +49,29 @@ void testHall() {
   Serial.println(sensors.getHallEff());
 }
 
-void testWifi() {
+void testWifiTX() {
+  mission.sendToVS("Hi Vision System :)");
+  String loc = String(mission.getX(), 3) + " " + String(mission.getY(), 3);
+  mission.sendToVS("Our current XY location is: " + loc);
+}
+
+void testWifiRX() {
   String x = String(mission.getX(), 3);
   Serial.println("X loc: " + x);
   String y = String(mission.getY(), 3);
   Serial.println("Y loc: " + y);
   String t = String(mission.getTheta(), 3);
   Serial.println("T loc: " + t);
-  delay(500);
-  
+  delay(50);
 }
 
 void testProp() {
   propulsion.driveFwdS(255);
-  delay(5000);
-  propulsion.driveBackwdS(255);
-  delay(5000);
+  delay(10000);
+  //propulsion.driveBackwdS(255);
+  //delay(5000);
   propulsion.stopMotors();
-  delay(5000);
+  delay(2000);
 }
 
 void testServo() {

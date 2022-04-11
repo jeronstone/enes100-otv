@@ -14,10 +14,11 @@ public:
 	float getX();
 	float getY();
 	float getTheta();
+  void sendToVS(String in);
 private:
 	const static int wifiRX = 8;
 	const static int wifiTX = 9;
-	const static int arucoID = 6;
+	const static int arucoID = 5;
 };
 
 #endif

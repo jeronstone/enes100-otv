@@ -4,7 +4,7 @@
 
 const static int wifiRX = 8;
 const static int wifiTX = 9;
-const static int arucoID = 6;
+const static int arucoID = 5;
 
 MissionHelper::MissionHelper() {
 }
@@ -37,6 +37,10 @@ float MissionHelper::getY() {
     Serial.println("Ysadge");
 	}
 	return Enes100.location.y;
+}
+
+void MissionHelper::sendToVS(String in) {
+  Enes100.println(in);
 }
 
 float MissionHelper::getTheta() {

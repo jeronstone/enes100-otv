@@ -19,6 +19,7 @@ public:
 	void turnRARight();
 	void turnRight(int theta);
 	void turnAround();
+  void turn90NoVS(bool dir); //1 -> left | 0 -> right
 private:
 	const int HBENA = 10;
 	const int HBENB = 11;
