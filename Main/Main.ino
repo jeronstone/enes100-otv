@@ -12,8 +12,8 @@ Sensors sensors;
 void setup() {
   Serial.begin(9600);
   
-  //Serial.println("Start Status: " + mission.start());
-  //Serial.println("Init loc update: " + mission.updateCurrLocation());
+  Serial.println("Start Status: " + mission.start());
+  Serial.println("Init loc update: " + mission.updateCurrLocation());
   //armServo.begin();
 }
 
@@ -25,10 +25,23 @@ void loop() {
   //delay(500);
   //testWifiTX();
   //delay(500);
-  testHall();
+  //testHall();
   //testDuty();
   //delay(1000);
   //testNoVSTurn();
+  //testReed();
+  testMagSensAndSend();
+}
+
+void testMagSensAndSend() {
+  Serial.println("Starts in 5 sec");
+  delay(5000);
+  Serial.println("Start");
+  bool mag = sensors.useReed();
+  Serial.println(mag);
+  mission.sendMagnetic(mag);
+  Serial.println("Done");
+  while(1);
 }
 
 void testNoVSTurn() {
@@ -38,6 +51,14 @@ void testNoVSTurn() {
   delay(1000);
   propulsion.turn90NoVS(1);
   delay(1000);
+  while(1);
+}
+
+void testReed() {
+  Serial.println("Starts in 5 sec");
+  delay(5000);
+  Serial.println("Start");
+  Serial.println(sensors.useReed());
   while(1);
 }
 

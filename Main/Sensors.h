@@ -12,6 +12,7 @@ public:
 	bool getHallEff();
 	bool dutyCircuitReady();
 	float readDutyCycle();
+  bool useReed();
 private:
 	const int ultrasonicRX = 4;
 	const int ultrasonicTX = 3;

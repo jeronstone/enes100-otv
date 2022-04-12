@@ -21,11 +21,23 @@ float Sensors::getUltrasonic() {
 }
 
 bool Sensors::getReed() {
-	return digitalRead(A0);
+	return !digitalRead(A0);
 }
 
-bool Sensors::getHallEff() {
-	return !digitalRead(A0);
+bool Sensors::useReed() {
+  int ti = millis();
+  int hc = 0;
+  int lc = 0;
+  while (millis() - ti < 10000) {
+    Serial.println(getReed());
+    if (getReed()) {
+      hc++;
+    } else {
+      lc++;
+    }
+  }
+
+  return hc > lc;
 }
 
 bool Sensors::dutyCircuitReady() {

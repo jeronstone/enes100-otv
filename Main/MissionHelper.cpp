@@ -4,7 +4,7 @@
 
 const static int wifiRX = 8;
 const static int wifiTX = 9;
-const static int arucoID = 5;
+const static int arucoID = 11;
 
 MissionHelper::MissionHelper() {
 }
