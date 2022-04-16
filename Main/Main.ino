@@ -12,13 +12,13 @@ Sensors sensors;
 void setup() {
   Serial.begin(9600);
   
-  Serial.println("Start Status: " + mission.start());
-  Serial.println("Init loc update: " + mission.updateCurrLocation());
-  //armServo.begin();
+  //Serial.println("Start Status: " + mission.start());
+  //Serial.println("Init loc update: " + mission.updateCurrLocation());
+  armServo.begin();
 }
 
 void loop() {
-  //testServo();
+  testServo();
   //testUS();
   //testProp();
   //testWifiRX();
@@ -30,7 +30,7 @@ void loop() {
   //delay(1000);
   //testNoVSTurn();
   //testReed();
-  testMagSensAndSend();
+  //testMagSensAndSend();
 }
 
 void testMagSensAndSend() {
@@ -98,6 +98,7 @@ void testProp() {
 void testServo() {
   armServo.runServoCCW();
   delay(2000);
+  armServo.stopServoRotation();
   armServo.runServoCW();
   delay(2000);
   armServo.stopServoRotation();

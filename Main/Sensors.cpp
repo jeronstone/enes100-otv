@@ -47,6 +47,6 @@ bool Sensors::dutyCircuitReady() {
 float Sensors::readDutyCycle() {
 	float high = pulseIn(missionCircuit, HIGH);
 	float low = pulseIn(missionCircuit, LOW);
-	float time = high + low;
-	return (high/time) * 100.0;
+	float t = high + low;
+	return (high/t) * 100.0;
 }
