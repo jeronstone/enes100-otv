@@ -40,7 +40,7 @@ void Propulsion::driveBackwdS(int speed) {
 }
 
 void Propulsion::driveFwd() {
-   driveFwdS(defaultPropSpeed);
+  driveFwdS(defaultPropSpeed);
 }
 
 void Propulsion::driveFwdS(int speed) {
@@ -59,22 +59,22 @@ void Propulsion::stopMotors() {
   digitalWrite(HBBDir2, LOW);
 }
 
-void Propulsion::turn90NoVS(bool dir){
+void Propulsion::turn90NoVS(bool dir) {
   if (dir) { //left
     digitalWrite(HBADir1, HIGH);
     digitalWrite(HBADir2, LOW);
     digitalWrite(HBBDir1, LOW);
     digitalWrite(HBBDir2, HIGH);
-    analogWrite(HBENA, 200);
-    analogWrite(HBENB, 200);
+    analogWrite(HBENA, defaultPropSpeed);
+    analogWrite(HBENB, defaultPropSpeed);
     delay(750);
   } else { //right
     digitalWrite(HBADir1, LOW);
     digitalWrite(HBADir2, HIGH);
     digitalWrite(HBBDir1, HIGH);
     digitalWrite(HBBDir2, LOW);
-    analogWrite(HBENA, 200);
-    analogWrite(HBENB, 200);
+    analogWrite(HBENA, defaultPropSpeed);
+    analogWrite(HBENB, defaultPropSpeed);
     delay(750);
   }
   stopMotors();
@@ -85,33 +85,34 @@ void Propulsion::turnTo(int theta) {
   int currTheta = _mission.getTheta();
   int t = degToRad(theta);
   if (t < currTheta) {
-     turnRight(abs(currTheta - t));
+    turnRight(abs(currTheta - t));
   } else {
-     turnLeft(abs(t - currTheta));
+    turnLeft(abs(t - currTheta));
   }
 }
 
 void Propulsion::turnRALeft() {
-    turnLeft(90);
+  turnLeft(90);
 }
 
 void Propulsion::turnLeft(int theta) {
   //_mission.updateCurrLocation();
   int currTheta = _mission.getTheta();
-  digitalWrite(HBADir1, LOW);
+  digitalWrite(HBADir1, HIGH);
   digitalWrite(HBADir2, LOW);
-  digitalWrite(HBBDir1, HIGH);
-  digitalWrite(HBBDir2, LOW);
-  analogWrite(HBENB, turnSpeed);
+  digitalWrite(HBBDir1, LOW);
+  digitalWrite(HBBDir2, HIGH);
+  analogWrite(HBENA, defaultPropSpeed);
+  analogWrite(HBENB, defaultPropSpeed);
   while (!(currTheta - thetaBuffer >  degToRad(theta) + currTheta)) {
     //_mission.updateCurrLocation();
     int currTheta = _mission.getTheta();
   }
-   stopMotors();
+  stopMotors();
 }
 
 void Propulsion::turnRARight() {
-   turnRight(90);
+  turnRight(90);
 }
 
 void Propulsion::turnRight(int theta) {
@@ -120,13 +121,14 @@ void Propulsion::turnRight(int theta) {
   digitalWrite(HBADir1, HIGH);
   digitalWrite(HBADir2, LOW);
   digitalWrite(HBBDir1, LOW);
-  digitalWrite(HBBDir2, LOW);
-  analogWrite(HBENA, turnSpeed);
+  digitalWrite(HBBDir2, HIGH);
+  analogWrite(HBENA, defaultPropSpeed);
+  analogWrite(HBENB, defaultPropSpeed);
   while (!(currTheta + thetaBuffer > currTheta - degToRad(theta))) {
     //_mission.updateCurrLocation();
     int currTheta = _mission.getTheta();
   }
-   stopMotors();
+  stopMotors();
 }
 
 void Propulsion::turnAround() {
@@ -139,6 +141,6 @@ void Propulsion::turnAround() {
   }
 }
 
-int Propulsion::degToRad(int deg) {
-   return deg * 0.01745;
+float Propulsion::degToRad(int deg) {
+  return deg * 0.01745;
 }

@@ -47,5 +47,9 @@ float MissionHelper::getTheta() {
 	if(!updateCurrLocation()) {
     Serial.println("Tsadge");
   }
-	return Enes100.location.theta;
+	return degToRad(Enes100.location.theta);
+}
+
+float MissionHelper::degToRad(int deg) {
+  return deg * 0.01745;
 }
