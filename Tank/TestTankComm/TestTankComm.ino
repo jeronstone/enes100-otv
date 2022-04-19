@@ -1,9 +1,11 @@
 #include "Tank.h"
 #include "Enes100.h"
 
+const int aruco = 13;
+
 void setup() {
   Serial.begin(9600);
-  Enes100.begin("Interstellar", DATA, 13, 10, 11);
+  Enes100.begin("Interstellar", DATA, aruco, 10, 11);
   Tank.begin();
 }
 
@@ -14,5 +16,4 @@ void loop() {
   Serial.println(Enes100.location.x);
   Serial.println(Enes100.location.y);
   Serial.println(Enes100.location.theta);
-
 }
