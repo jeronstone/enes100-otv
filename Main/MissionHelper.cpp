@@ -4,7 +4,7 @@
 
 const static int wifiRX = 8;
 const static int wifiTX = 9;
-const static int arucoID = 11;
+const static int arucoID = 205;
 
 MissionHelper::MissionHelper() {
 }
@@ -27,14 +27,14 @@ bool MissionHelper::updateCurrLocation() {
 
 float MissionHelper::getX() {
 	if(!updateCurrLocation()) {
-    Serial.println("Xsadge");
+    Enes100.println("Xsadge");
   }
 	return Enes100.location.x;
 }
 
 float MissionHelper::getY() {
 	if(!updateCurrLocation()) {
-    Serial.println("Ysadge");
+    Enes100.println("Ysadge");
 	}
 	return Enes100.location.y;
 }
@@ -44,12 +44,19 @@ void MissionHelper::sendToVS(String in) {
 }
 
 float MissionHelper::getTheta() {
-	if(!updateCurrLocation()) {
-    Serial.println("Tsadge");
+	while(!updateCurrLocation()) {
+    Enes100.println("Tsadge");
+    delay(30);
   }
-	return degToRad(Enes100.location.theta);
+	return Enes100.location.theta;
 }
 
 float MissionHelper::degToRad(int deg) {
   return deg * 0.01745;
+}
+
+void MissionHelper::printToVS() {
+  Enes100.println(Enes100.location.x);
+  Enes100.println(Enes100.location.y);
+  Enes100.println(Enes100.location.theta);
 }

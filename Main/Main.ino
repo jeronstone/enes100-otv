@@ -11,12 +11,12 @@ Sensors sensors;
 
 void setup() {
   Serial.begin(9600);
-  //mission.start();
-  //mission.updateCurrLocation();
-
+  while(!mission.start());
+  mission.updateCurrLocation();
+  mission.printToVS();
   //Serial.println("Start Status: " + mission.start());
   //Serial.println("Init loc update: " + mission.updateCurrLocation());
-  armServo.begin();
+  //armServo.begin();
 }
 
 double midpointY = 1.0; // 1 meter,we need to make sure this is right (enes100 library and stuff has lots of mistakes)
@@ -39,13 +39,18 @@ void loop() {
   //if the y position is greater than the midpoint, then the robot is on the north side and the mission is on the south side. else, vice versa.
 
   // nav code
-  //prepareNav();
-  //findHole();
-  //prepareNav();
-  //findHole();
-  //clearLimbo();
-  
-  testServoAgain();
+  prepareNav();
+  findHole();
+  prepareNav();
+  findHole();
+  clearLimbo();
+
+  //testServoAgain();
+  //testUS();
+  //testProp();
+  //testNoVSTurn();
+  //testTurnVS();
+
 
   // runs infinite while loop
   //finish();
@@ -54,7 +59,7 @@ void loop() {
 
 void doMission(boolean robotIsNorth) { // true if north, false if south
   mission.updateCurrLocation();
-  armServo.runArmUp();
+  //armServo.runArmUp(); TODO UNDO COMMENT OUT
   if (robotIsNorth) {
     propulsion.turnTo(-90);
     mission.updateCurrLocation();
@@ -74,6 +79,8 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
     propulsion.stopMotors();
     mission.updateCurrLocation();
   }
+  // TODO COMMENT THIS OUT
+  return;
 
   // doing the mission stuff
   armServo.runArmDown();
@@ -164,6 +171,15 @@ void finish() {
   }
 }
 
+void testTurnVS() {
+  mission.printToVS();
+  propulsion.turnTo(90);
+  mission.sendToVS("SWAGGGGGG");
+  delay(5000);
+  propulsion.turnTo(0);
+  while(1);
+}
+
 void testMagSensAndSend() {
   Serial.println("Starts in 5 sec");
   delay(5000);
@@ -219,7 +235,7 @@ void testWifiRX() {
 
 void testProp() {
   propulsion.driveFwdS(255);
-  delay(10000);
+  delay(5000);
   //propulsion.driveBackwdS(255);
   //delay(5000);
   propulsion.stopMotors();

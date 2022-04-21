@@ -9,9 +9,9 @@ const int HBBDir1 = 2;
 const int HBADir2 = 6;
 const int HBBDir2 = 13;
 
-const int defaultPropSpeed = 200;
+const int defaultPropSpeed = 100;
 const int turnSpeed = 100;
-const float thetaBuffer = 0.196;
+const float thetaBuffer = 0.1;
 
 MissionHelper _mission;
 
@@ -82,8 +82,9 @@ void Propulsion::turn90NoVS(bool dir) {
 
 void Propulsion::turnTo(int theta) {
   //_mission.updateCurrLocation();
-  int currTheta = _mission.getTheta();
-  int t = degToRad(theta);
+  float currTheta = _mission.getTheta();
+  float t = degToRad(theta);
+  _mission.sendToVS(String(t));
   if (t < currTheta) {
     turnRight(abs(currTheta - t));
   } else {
@@ -97,16 +98,19 @@ void Propulsion::turnRALeft() {
 
 void Propulsion::turnLeft(int theta) {
   //_mission.updateCurrLocation();
-  int currTheta = _mission.getTheta();
+  float initTheta = _mission.getTheta();
   digitalWrite(HBADir1, HIGH);
   digitalWrite(HBADir2, LOW);
   digitalWrite(HBBDir1, LOW);
   digitalWrite(HBBDir2, HIGH);
   analogWrite(HBENA, defaultPropSpeed);
   analogWrite(HBENB, defaultPropSpeed);
-  while (!(currTheta - thetaBuffer >  degToRad(theta) + currTheta)) {
+  float currTheta = initTheta;
+  while (!(currTheta - thetaBuffer >  theta + initTheta)) {
     //_mission.updateCurrLocation();
-    int currTheta = _mission.getTheta();
+    currTheta = _mission.getTheta();
+    _mission.sendToVS("CURR THETA: " + String(currTheta));
+    _mission.sendToVS("TARGET THETA: " + String(theta + initTheta));
   }
   stopMotors();
 }
@@ -117,16 +121,19 @@ void Propulsion::turnRARight() {
 
 void Propulsion::turnRight(int theta) {
   //_mission.updateCurrLocation();
-  int currTheta = _mission.getTheta();
+  float initTheta = _mission.getTheta();
   digitalWrite(HBADir1, HIGH);
   digitalWrite(HBADir2, LOW);
   digitalWrite(HBBDir1, LOW);
   digitalWrite(HBBDir2, HIGH);
   analogWrite(HBENA, defaultPropSpeed);
   analogWrite(HBENB, defaultPropSpeed);
-  while (!(currTheta + thetaBuffer > currTheta - degToRad(theta))) {
+  float currTheta = initTheta;
+  while (!(currTheta + thetaBuffer < initTheta - theta)) {
     //_mission.updateCurrLocation();
-    int currTheta = _mission.getTheta();
+    currTheta = _mission.getTheta();
+     _mission.sendToVS("CURR THETA: " + String(currTheta));
+    _mission.sendToVS("TARGET THETA: " + String(theta + initTheta));
   }
   stopMotors();
 }
