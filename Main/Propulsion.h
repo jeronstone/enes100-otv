@@ -27,9 +27,9 @@ class Propulsion
     const int HBBDir1 = 2;
     const int HBADir2 = 6;
     const int HBBDir2 = 13;
-    const int defaultPropSpeed = 200;
-    const int turnSpeed = 100;
-    const float thetaBuffer = 0.393;
+    const int defaultPropSpeed = 100;
+    const int turnSpeed = 75;
+    const float thetaBuffer = 0.1;
     MissionHelper _mission;
     float degToRad(int deg);
 };

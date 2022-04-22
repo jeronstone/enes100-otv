@@ -10,7 +10,7 @@ const int HBADir2 = 6;
 const int HBBDir2 = 13;
 
 const int defaultPropSpeed = 100;
-const int turnSpeed = 100;
+const int turnSpeed = 75;
 const float thetaBuffer = 0.1;
 
 MissionHelper _mission;
@@ -103,8 +103,8 @@ void Propulsion::turnLeft(int theta) {
   digitalWrite(HBADir2, LOW);
   digitalWrite(HBBDir1, LOW);
   digitalWrite(HBBDir2, HIGH);
-  analogWrite(HBENA, defaultPropSpeed);
-  analogWrite(HBENB, defaultPropSpeed);
+  analogWrite(HBENA, turnSpeed);
+  analogWrite(HBENB, turnSpeed);
   float currTheta = initTheta;
   while (!(currTheta - thetaBuffer >  theta + initTheta)) {
     //_mission.updateCurrLocation();
@@ -126,8 +126,8 @@ void Propulsion::turnRight(int theta) {
   digitalWrite(HBADir2, LOW);
   digitalWrite(HBBDir1, LOW);
   digitalWrite(HBBDir2, HIGH);
-  analogWrite(HBENA, defaultPropSpeed);
-  analogWrite(HBENB, defaultPropSpeed);
+  analogWrite(HBENA, turnSpeed);
+  analogWrite(HBENB, turnSpeed);
   float currTheta = initTheta;
   while (!(currTheta + thetaBuffer < initTheta - theta)) {
     //_mission.updateCurrLocation();
