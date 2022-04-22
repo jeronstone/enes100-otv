@@ -11,9 +11,9 @@ Sensors sensors;
 
 void setup() {
   Serial.begin(9600);
-  //while(!mission.start());
-  //mission.updateCurrLocation();
-  //mission.printToVS();
+  while(!mission.start());
+  mission.updateCurrLocation();
+  mission.printToVS();
   //Serial.println("Start Status: " + mission.start());
   //Serial.println("Init loc update: " + mission.updateCurrLocation());
   //armServo.begin();
@@ -21,14 +21,14 @@ void setup() {
 
 double midpointY = 1.0; // 1 meter,we need to make sure this is right (enes100 library and stuff has lots of mistakes)
 double sidePointMissionSite = 0.2; // outer edge of mission zone
-double bottomObstacleField = 0.5; // theoretical "bottom" of obstacle field
+double bottomObstacleField = 0.6; // theoretical "bottom" of obstacle field
 double southTopEdge = 0.8; // dISTANCE BEFORE ROBOT ARM IS HOVERING OVER DATA POINT
 double northBottomEdge = 1.2; // these are guesses :<
-double obstacleExists = 10; // cm, theoretical value that an object exists if ultrasonic sensor value reads <= to this value
-int timeToClearObstacleY = 1000; // ms, time until the robot has cleared an obstacle in the y dir
-int timeToClearObstacleX = 1000; // ms, time until the robot has cleared an obstacle in the x dir
+double obstacleExists = 40; // cm, theoretical value that an object exists if ultrasonic sensor value reads <= to this value
+int timeToClearObstacleY = 250; // ms, time until the robot has cleared an obstacle in the y dir
+int timeToClearObstacleX = 1500; // ms, time until the robot has cleared an obstacle in the x dir
 double limboMidPoint = 1.5; // Y coord of midpoint of limbo
-int timeToClearLimbo = 500; // time to clear limbo
+int timeToClearLimbo = 2500; // time to clear limbo
 double dutyCycle;
 boolean magnetic;
 
@@ -39,21 +39,21 @@ void loop() {
   //if the y position is greater than the midpoint, then the robot is on the north side and the mission is on the south side. else, vice versa.
 
   // nav code
-  //prepareNav();
-  //findHole();
-  //prepareNav();
-  //findHole();
-  //clearLimbo();
+  prepareNav();
+  findHole();
+  prepareNav();
+  findHole();
+  clearLimbo();
 
   //testServoAgain();
-  testUS();
+  //ftestUS();
   //testProp();
   //testNoVSTurn();
   //testTurnVS();
 
 
   // runs infinite while loop
-  //finish();
+  finish();
   // pog
 }
 
@@ -61,7 +61,7 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
   mission.updateCurrLocation();
   //armServo.runArmUp(); TODO UNDO COMMENT OUT
   if (robotIsNorth) {
-    propulsion.turnTo(-90);
+    propulsion.turnTo(-PI/2);
     mission.updateCurrLocation();
     while (mission.getY() > southTopEdge) {   // POINT AT WHICH ARM IS HOVERING OVER MIDPOINT OF DATA EXTRACTION POINT
       propulsion.driveFwd();
@@ -70,7 +70,7 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
     propulsion.stopMotors();
     mission.updateCurrLocation();
   } else {
-    propulsion.turnTo(90);
+    propulsion.turnTo(PI/2);
     mission.updateCurrLocation();
     while (mission.getY() < northBottomEdge) { // POINT AT WHICH ARM IS HOVERING OVER MIDPOINT OF DATA EXTRACTION POINT
       propulsion.driveFwd();
@@ -118,7 +118,7 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
 }
 
 void prepareNav() {
-  propulsion.turnTo(85);
+  propulsion.turnTo(PI/2);
   mission.updateCurrLocation();
   while (mission.getY() > bottomObstacleField) {
     propulsion.driveBackwd();
@@ -126,12 +126,14 @@ void prepareNav() {
   }
   propulsion.stopMotors();
   mission.updateCurrLocation();
+  propulsion.turnTo(PI/2);
 }
 void findHole() {
   while (sensors.getUltrasonic() < obstacleExists) {
     mission.sendToVS(String(sensors.getUltrasonic()));
     propulsion.driveFwd();
     mission.updateCurrLocation();
+    delay(30);
   }
   propulsion.stopMotors();
   mission.updateCurrLocation();
@@ -150,7 +152,7 @@ void findHole() {
 }
 
 void clearLimbo() {
-  propulsion.turnTo(90);
+  propulsion.turnTo(PI/2);
   mission.updateCurrLocation();
   while (mission.getY() < limboMidPoint) {
     propulsion.driveFwd();
@@ -189,16 +191,6 @@ void testMagSensAndSend() {
   Serial.println(mag);
   mission.sendMagnetic(mag);
   Serial.println("Done");
-  while (1);
-}
-
-void testNoVSTurn() {
-  propulsion.turn90NoVS(1);
-  delay(1000);
-  propulsion.turn90NoVS(0);
-  delay(1000);
-  propulsion.turn90NoVS(1);
-  delay(1000);
   while (1);
 }
 

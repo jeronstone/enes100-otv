@@ -17,10 +17,9 @@ class MissionHelper
     void sendToVS(String in);
     void printToVS();
   private:
-    float degToRad(int deg);
     const static int wifiRX = 8;
     const static int wifiTX = 9;
-    const static int arucoID = 215;
+    const static int arucoID = 11;
 };
 
 #endif

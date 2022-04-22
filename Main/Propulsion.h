@@ -13,13 +13,10 @@ class Propulsion
     void driveBackwd();
     void driveBackwdS(int speed);
     void stopMotors();
-    void turnTo(int theta);
-    void turnRALeft();
-    void turnLeft(int theta);
-    void turnRARight();
-    void turnRight(int theta);
-    void turnAround();
-    void turn90NoVS(bool dir); //1 -> left | 0 -> right
+    void sendMotorsLeft();
+    void sendMotorsRight();
+    void turnTo(float targetTheta);
+    float degToRad(int deg);
   private:
     const int HBENA = 10;
     const int HBENB = 11;
@@ -28,10 +25,9 @@ class Propulsion
     const int HBADir2 = 6;
     const int HBBDir2 = 13;
     const int defaultPropSpeed = 100;
-    const int turnSpeed = 75;
-    const float thetaBuffer = 0.1;
+    const int turnSpeed = 50;
+    const float thetaBuffer = 0.25;
     MissionHelper _mission;
-    float degToRad(int deg);
 };
 
 #endif

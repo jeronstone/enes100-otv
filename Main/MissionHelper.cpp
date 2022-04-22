@@ -4,7 +4,7 @@
 
 const static int wifiRX = 8;
 const static int wifiTX = 9;
-const static int arucoID = 215;
+const static int arucoID = 11;
 
 MissionHelper::MissionHelper() {
 }
@@ -49,10 +49,6 @@ float MissionHelper::getTheta() {
     delay(30);
   }
 	return Enes100.location.theta;
-}
-
-float MissionHelper::degToRad(int deg) {
-  return deg * 0.01745;
 }
 
 void MissionHelper::printToVS() {

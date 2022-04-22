@@ -10,8 +10,8 @@ const int HBADir2 = 6;
 const int HBBDir2 = 13;
 
 const int defaultPropSpeed = 100;
-const int turnSpeed = 75;
-const float thetaBuffer = 0.1;
+const int turnSpeed = 50;
+const float thetaBuffer = 0.25;
 
 MissionHelper _mission;
 
@@ -59,93 +59,47 @@ void Propulsion::stopMotors() {
   digitalWrite(HBBDir2, LOW);
 }
 
-void Propulsion::turn90NoVS(bool dir) {
-  if (dir) { //left
-    digitalWrite(HBADir1, HIGH);
-    digitalWrite(HBADir2, LOW);
-    digitalWrite(HBBDir1, LOW);
-    digitalWrite(HBBDir2, HIGH);
-    analogWrite(HBENA, defaultPropSpeed);
-    analogWrite(HBENB, defaultPropSpeed);
-    delay(750);
-  } else { //right
-    digitalWrite(HBADir1, LOW);
-    digitalWrite(HBADir2, HIGH);
-    digitalWrite(HBBDir1, HIGH);
-    digitalWrite(HBBDir2, LOW);
-    analogWrite(HBENA, defaultPropSpeed);
-    analogWrite(HBENB, defaultPropSpeed);
-    delay(750);
-  }
-  stopMotors();
+void Propulsion::sendMotorsLeft() {
+  digitalWrite(HBADir1, HIGH);
+  digitalWrite(HBADir2, LOW);
+  digitalWrite(HBBDir1, LOW);
+  digitalWrite(HBBDir2, HIGH);
+  analogWrite(HBENA, turnSpeed);
+  analogWrite(HBENB, turnSpeed);
 }
 
-void Propulsion::turnTo(int theta) {
-  //_mission.updateCurrLocation();
+void Propulsion::sendMotorsRight() {
+  digitalWrite(HBADir1, LOW);
+  digitalWrite(HBADir2, HIGH);
+  digitalWrite(HBBDir1, HIGH);
+  digitalWrite(HBBDir2, LOW);
+  analogWrite(HBENA, turnSpeed);
+  analogWrite(HBENB, turnSpeed);
+}
+
+void Propulsion::turnTo(float targetTheta) {
   float currTheta = _mission.getTheta();
-  float t = degToRad(theta);
-  _mission.sendToVS(String(t));
-  if (t < currTheta) {
-    turnRight(abs(currTheta - t));
+  bool swag = false;
+  if (currTheta - targetTheta > 0) {
+    sendMotorsRight();
   } else {
-    turnLeft(abs(t - currTheta));
+    sendMotorsLeft();
+    swag = true;
   }
-}
-
-void Propulsion::turnRALeft() {
-  turnLeft(90);
-}
-
-void Propulsion::turnLeft(int theta) {
-  //_mission.updateCurrLocation();
-  float initTheta = _mission.getTheta();
-  digitalWrite(HBADir1, HIGH);
-  digitalWrite(HBADir2, LOW);
-  digitalWrite(HBBDir1, LOW);
-  digitalWrite(HBBDir2, HIGH);
-  analogWrite(HBENA, turnSpeed);
-  analogWrite(HBENB, turnSpeed);
-  float currTheta = initTheta;
-  while (!(currTheta - thetaBuffer >  theta + initTheta)) {
-    //_mission.updateCurrLocation();
+  
+  while (abs(currTheta - targetTheta) > thetaBuffer) {
     currTheta = _mission.getTheta();
-    _mission.sendToVS("CURR THETA: " + String(currTheta));
-    _mission.sendToVS("TARGET THETA: " + String(theta + initTheta));
+    delay(30);
   }
+  
   stopMotors();
-}
-
-void Propulsion::turnRARight() {
-  turnRight(90);
-}
-
-void Propulsion::turnRight(int theta) {
-  //_mission.updateCurrLocation();
-  float initTheta = _mission.getTheta();
-  digitalWrite(HBADir1, HIGH);
-  digitalWrite(HBADir2, LOW);
-  digitalWrite(HBBDir1, LOW);
-  digitalWrite(HBBDir2, HIGH);
-  analogWrite(HBENA, turnSpeed);
-  analogWrite(HBENB, turnSpeed);
-  float currTheta = initTheta;
-  while (!(currTheta + thetaBuffer < initTheta - theta)) {
-    //_mission.updateCurrLocation();
-    currTheta = _mission.getTheta();
-     _mission.sendToVS("CURR THETA: " + String(currTheta));
-    _mission.sendToVS("TARGET THETA: " + String(theta + initTheta));
-  }
-  stopMotors();
-}
-
-void Propulsion::turnAround() {
-  //_mission.updateCurrLocation();
-  int currTheta = _mission.getTheta();
-  if (currTheta > 0) {
-    turnRight(180);
-  } else {
-    turnLeft(180);
-  }
+  delay(500);
+  
+  //if (swag) {
+  //  sendMotorsRight();
+  //  delay(500);
+  //}
+  //stopMotors();
 }
 
 float Propulsion::degToRad(int deg) {
