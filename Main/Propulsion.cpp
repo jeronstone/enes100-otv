@@ -15,6 +15,7 @@ const float thetaBuffer = 0.25;
 
 MissionHelper _mission;
 
+// propulsion system with param mission wrapper
 Propulsion::Propulsion(MissionHelper mission) {
   _mission = mission;
   pinMode(HBENA, OUTPUT);
@@ -26,10 +27,12 @@ Propulsion::Propulsion(MissionHelper mission) {
   stopMotors();
 }
 
+// sends OTV backwards at default speed
 void Propulsion::driveBackwd() {
   driveBackwdS(defaultPropSpeed);
 }
 
+// sends OTV backwards at param speed
 void Propulsion::driveBackwdS(int speed) {
   digitalWrite(HBADir1, HIGH);
   digitalWrite(HBADir2, LOW);
@@ -39,10 +42,12 @@ void Propulsion::driveBackwdS(int speed) {
   analogWrite(HBENB, speed);
 }
 
+// sends OTV forward at default speed
 void Propulsion::driveFwd() {
   driveFwdS(defaultPropSpeed);
 }
 
+// sends OTV forwards at param speed
 void Propulsion::driveFwdS(int speed) {
   digitalWrite(HBADir1, LOW);
   digitalWrite(HBADir2, HIGH);
@@ -52,6 +57,7 @@ void Propulsion::driveFwdS(int speed) {
   analogWrite(HBENB, speed);
 }
 
+// stops OTV
 void Propulsion::stopMotors() {
   digitalWrite(HBADir1, LOW);
   digitalWrite(HBADir2, LOW);
@@ -59,6 +65,7 @@ void Propulsion::stopMotors() {
   digitalWrite(HBBDir2, LOW);
 }
 
+// turns OTV left
 void Propulsion::sendMotorsLeft() {
   digitalWrite(HBADir1, HIGH);
   digitalWrite(HBADir2, LOW);
@@ -68,6 +75,7 @@ void Propulsion::sendMotorsLeft() {
   analogWrite(HBENB, turnSpeed);
 }
 
+// turns OTV right
 void Propulsion::sendMotorsRight() {
   digitalWrite(HBADir1, LOW);
   digitalWrite(HBADir2, HIGH);
@@ -77,6 +85,7 @@ void Propulsion::sendMotorsRight() {
   analogWrite(HBENB, turnSpeed);
 }
 
+// turns OTV to param theta
 void Propulsion::turnTo(float targetTheta) {
   float currTheta = _mission.getTheta();
   bool swag = false;
@@ -102,6 +111,8 @@ void Propulsion::turnTo(float targetTheta) {
   //stopMotors();
 }
 
+// converts degrees to radians
+// probably not needed/used but im keeping it just in case :)
 float Propulsion::degToRad(int deg) {
   return deg * 0.01745;
 }

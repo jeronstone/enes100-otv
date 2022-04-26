@@ -9,17 +9,7 @@ ArmServo armServo;
 Propulsion propulsion(mission);
 Sensors sensors;
 
-void setup() {
-  Serial.begin(9600);
-  while(!mission.start());
-  mission.updateCurrLocation();
-  mission.printToVS();
-  //Serial.println("Start Status: " + mission.start());
-  //Serial.println("Init loc update: " + mission.updateCurrLocation());
-  //armServo.begin();
-}
-
-double midpointY = 1.0; // 1 meter,we need to make sure this is right (enes100 library and stuff has lots of mistakes)
+double midpointY = 1.0; // 1 meter, we need to make sure this is right (enes100 library and stuff has lots of mistakes)
 double sidePointMissionSite = 0.2; // outer edge of mission zone
 double bottomObstacleField = 0.6; // theoretical "bottom" of obstacle field
 double southTopEdge = 0.8; // dISTANCE BEFORE ROBOT ARM IS HOVERING OVER DATA POINT
@@ -32,10 +22,33 @@ int timeToClearLimbo = 2500; // time to clear limbo
 double dutyCycle;
 boolean magnetic;
 
-void loop() {
-  //mission.updateCurrLocation();
+void setup() {
+  Serial.begin(9600);
+  startMission(); // IF NO WIFI CONNECTION NEEDED FOR TESTING, COMMENT OUT
+  armServo.begin();
+  delay(10000);
+  Serial.println(u8"\U0001f4aa");
+}
 
-  //doMission((mission.getY() > midpointY));
+// starts mission stuff
+void startMission() {
+  while (!mission.start());
+  mission.sendToVS("CONNECTED");
+  mission.updateCurrLocation();
+  mission.printToVS();
+  Serial.println("Start Status: " + mission.start());
+  Serial.println("Init loc update: " + mission.updateCurrLocation());
+}
+
+void loop() { // if testing, comment out realMission() and run testing()
+  realMission();
+  //testing(); // write testing code in testing() method found in Test.ino
+}
+
+void realMission() {
+  mission.updateCurrLocation();
+
+  doMission((mission.getY() > midpointY));
   //if the y position is greater than the midpoint, then the robot is on the north side and the mission is on the south side. else, vice versa.
 
   // nav code
@@ -45,13 +58,6 @@ void loop() {
   findHole();
   clearLimbo();
 
-  //testServoAgain();
-  //ftestUS();
-  //testProp();
-  //testNoVSTurn();
-  //testTurnVS();
-
-
   // runs infinite while loop
   finish();
   // pog
@@ -59,9 +65,9 @@ void loop() {
 
 void doMission(boolean robotIsNorth) { // true if north, false if south
   mission.updateCurrLocation();
-  //armServo.runArmUp(); TODO UNDO COMMENT OUT
+  armServo.runArmUp(2750);
   if (robotIsNorth) {
-    propulsion.turnTo(-PI/2);
+    propulsion.turnTo(-PI / 2);
     mission.updateCurrLocation();
     while (mission.getY() > southTopEdge) {   // POINT AT WHICH ARM IS HOVERING OVER MIDPOINT OF DATA EXTRACTION POINT
       propulsion.driveFwd();
@@ -70,7 +76,7 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
     propulsion.stopMotors();
     mission.updateCurrLocation();
   } else {
-    propulsion.turnTo(PI/2);
+    propulsion.turnTo(PI / 2);
     mission.updateCurrLocation();
     while (mission.getY() < northBottomEdge) { // POINT AT WHICH ARM IS HOVERING OVER MIDPOINT OF DATA EXTRACTION POINT
       propulsion.driveFwd();
@@ -79,15 +85,13 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
     propulsion.stopMotors();
     mission.updateCurrLocation();
   }
-  // TODO COMMENT THIS OUT
-  return;
 
   // doing the mission stuff
-  armServo.runArmDown();
+  armServo.runArmDown(2750);
   sensors.dutyCircuitReady();
   mission.sendDutyCycle(sensors.readDutyCycle());
   mission.sendMagnetic(sensors.useReed());
-  armServo.runArmUp();
+  armServo.runArmUp(2750);
 
   // navigate to center of field
   if (robotIsNorth) { // robot WAS north, and is now south
@@ -105,7 +109,7 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
   mission.updateCurrLocation();
 
   // navigate to side edge of mission site
-  armServo.runArmDown();
+  armServo.runArmDown(2750);
   propulsion.turnTo(0);
   mission.updateCurrLocation();
   while (mission.getX() < sidePointMissionSite) {
@@ -118,7 +122,7 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
 }
 
 void prepareNav() {
-  propulsion.turnTo(PI/2);
+  propulsion.turnTo(PI / 2);
   mission.updateCurrLocation();
   while (mission.getY() > bottomObstacleField) {
     propulsion.driveBackwd();
@@ -126,7 +130,7 @@ void prepareNav() {
   }
   propulsion.stopMotors();
   mission.updateCurrLocation();
-  propulsion.turnTo(PI/2);
+  propulsion.turnTo(PI / 2);
 }
 void findHole() {
   while (sensors.getUltrasonic() < obstacleExists) {
@@ -152,7 +156,7 @@ void findHole() {
 }
 
 void clearLimbo() {
-  propulsion.turnTo(PI/2);
+  propulsion.turnTo(PI / 2);
   mission.updateCurrLocation();
   while (mission.getY() < limboMidPoint) {
     propulsion.driveFwd();
@@ -172,88 +176,4 @@ void finish() {
   while (true) {
     //nothing
   }
-}
-
-void testTurnVS() {
-  mission.printToVS();
-  propulsion.turnTo(90);
-  mission.sendToVS("SWAGGGGGG");
-  delay(5000);
-  propulsion.turnTo(0);
-  while(1);
-}
-
-void testMagSensAndSend() {
-  Serial.println("Starts in 5 sec");
-  delay(5000);
-  Serial.println("Start");
-  bool mag = sensors.useReed();
-  Serial.println(mag);
-  mission.sendMagnetic(mag);
-  Serial.println("Done");
-  while (1);
-}
-
-void testReed() {
-  Serial.println("Starts in 5 sec");
-  delay(5000);
-  Serial.println("Start");
-  Serial.println(sensors.useReed());
-  while (1);
-}
-
-void testDuty() {
-  Serial.println(sensors.readDutyCycle());
-}
-
-void testHall() {
-  Serial.println(sensors.getHallEff());
-}
-
-void testWifiTX() {
-  mission.sendToVS("Hi Vision System :)");
-  String loc = String(mission.getX(), 3) + " " + String(mission.getY(), 3);
-  mission.sendToVS("Our current XY location is: " + loc);
-}
-
-void testWifiRX() {
-  String x = String(mission.getX(), 3);
-  Serial.println("X loc: " + x);
-  String y = String(mission.getY(), 3);
-  Serial.println("Y loc: " + y);
-  String t = String(mission.getTheta(), 3);
-  Serial.println("T loc: " + t);
-  delay(50);
-}
-
-void testProp() {
-  propulsion.driveFwdS(255);
-  delay(5000);
-  //propulsion.driveBackwdS(255);
-  //delay(5000);
-  propulsion.stopMotors();
-  delay(2000);
-}
-
-void testServoAgain() {
-  Serial.println("swag");
-  armServo.runArmDown();
-  delay(3000);
-  armServo.runArmUp();
-  delay(3000);
-}
-
-void testServo() {
-  armServo.runServoCCW();
-  delay(2000);
-  armServo.stopServoRotation();
-  armServo.runServoCW();
-  delay(2000);
-  armServo.stopServoRotation();
-  delay(2000);
-}
-
-void testUS() {
-  float x = sensors.getUltrasonic();
-  Serial.println(x);
 }
