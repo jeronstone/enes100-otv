@@ -52,12 +52,26 @@ bool Sensors::dutyCircuitReady() {
 
 // returns reed cycle read
 float Sensors::readDutyCycle() {
-  //int swag[500];
-  //for (int i = 0; i < 500; i ++) {
+  float dutyRaw[100];
+  int i = 0;
+  while (i < 100) {
     float high = pulseIn(missionCircuit, HIGH);
     float low = pulseIn(missionCircuit, LOW);
     float t = high + low;
-    return (high / t) * 100.0;
-    //swag[i] = (high / t) * 100.0;
-  //}
+    float val = (high / t) * 100.0;
+    //return val;
+    Serial.println("VAL: " + String(val));
+    if (val != 0.0 && val != 100.0 && round(val) % 10 == 0) {
+      Serial.println("VALID" + String(i));
+      dutyRaw[i] = val;
+      i++;
+    }
+  }
+
+  float sum;
+  for (int i = 0; i < 100; i ++) {
+    sum += dutyRaw[i];
+  }
+
+  return sum / 100.0;
 }

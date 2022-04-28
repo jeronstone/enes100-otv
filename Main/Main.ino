@@ -9,22 +9,24 @@ ArmServo armServo;
 Propulsion propulsion(mission);
 Sensors sensors;
 
-double midpointY = 1.0; // 1 meter, we need to make sure this is right (enes100 library and stuff has lots of mistakes)
-double sidePointMissionSite = 0.2; // outer edge of mission zone
-double bottomObstacleField = 0.6; // theoretical "bottom" of obstacle field
-double southTopEdge = 0.8; // dISTANCE BEFORE ROBOT ARM IS HOVERING OVER DATA POINT
-double northBottomEdge = 1.2; // these are guesses :<
-double obstacleExists = 40; // cm, theoretical value that an object exists if ultrasonic sensor value reads <= to this value
-int timeToClearObstacleY = 250; // ms, time until the robot has cleared an obstacle in the y dir
-int timeToClearObstacleX = 1500; // ms, time until the robot has cleared an obstacle in the x dir
-double limboMidPoint = 1.5; // Y coord of midpoint of limbo
-int timeToClearLimbo = 2500; // time to clear limbo
+const double midpointY = 1.0; // 1 meter, we need to make sure this is right (enes100 library and stuff has lots of mistakes)
+const double sidePointMissionSite = 0.2; // outer edge of mission zone
+const double bottomObstacleField = 0.6; // theoretical "bottom" of obstacle field
+const double southTopEdge = 0.8; // dISTANCE BEFORE ROBOT ARM IS HOVERING OVER DATA POINT
+const double northBottomEdge = 1.2; // these are guesses :<
+const double obstacleExists = 40; // cm, theoretical value that an object exists if ultrasonic sensor value reads <= to this value
+const int timeToClearObstacleY = 250; // ms, time until the robot has cleared an obstacle in the y dir
+const int timeToClearObstacleX = 1500; // ms, time until the robot has cleared an obstacle in the x dir
+const double limboMidPoint = 1.5; // Y coord of midpoint of limbo
+const int timeToClearLimbo = 2500; // time to clear limbo
+const int upTime = 3800;
+const int downTime = 3800;
 double dutyCycle;
 boolean magnetic;
 
 void setup() {
   Serial.begin(9600);
-  startMission(); // IF NO WIFI CONNECTION NEEDED FOR TESTING, COMMENT OUT
+  //startMission(); // IF NO WIFI CONNECTION NEEDED FOR TESTING, COMMENT OUT
   armServo.begin();
   delay(10000);
   Serial.println(u8"\U0001f4aa");
@@ -41,8 +43,8 @@ void startMission() {
 }
 
 void loop() { // if testing, comment out realMission() and run testing()
-  realMission();
-  //testing(); // write testing code in testing() method found in Test.ino
+  //realMission();
+  testing(); // write testing code in testing() method found in Test.ino
 }
 
 void realMission() {
@@ -65,7 +67,7 @@ void realMission() {
 
 void doMission(boolean robotIsNorth) { // true if north, false if south
   mission.updateCurrLocation();
-  armServo.runArmUp(2750);
+  //armServo.runArmUp(upTime);
   if (robotIsNorth) {
     propulsion.turnTo(-PI / 2);
     mission.updateCurrLocation();
@@ -87,11 +89,13 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
   }
 
   // doing the mission stuff
-  armServo.runArmDown(2750);
+  armServo.runArmDown(downTime);
   sensors.dutyCircuitReady();
-  mission.sendDutyCycle(sensors.readDutyCycle());
-  mission.sendMagnetic(sensors.useReed());
-  armServo.runArmUp(2750);
+  float duty = sensors.readDutyCycle();
+  mission.sendDutyCycle(duty);
+  bool reed = sensors.useReed();
+  mission.sendMagnetic(reed);
+  armServo.runArmUp(upTime);
 
   // navigate to center of field
   if (robotIsNorth) { // robot WAS north, and is now south
@@ -109,7 +113,7 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
   mission.updateCurrLocation();
 
   // navigate to side edge of mission site
-  armServo.runArmDown(2750);
+  armServo.runArmDown(downTime);
   propulsion.turnTo(0);
   mission.updateCurrLocation();
   while (mission.getX() < sidePointMissionSite) {
@@ -173,6 +177,7 @@ void clearLimbo() {
 }
 
 void finish() {
+  mission.sendToVS(u8"\U0001f4aa");
   while (true) {
     //nothing
   }

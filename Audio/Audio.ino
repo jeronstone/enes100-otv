@@ -15,7 +15,8 @@ void setup()
     Serial.println("SD fail");
     return;
   }
-  tmrpcm.setVolume(6);
+  Serial.println("SUCCESS");
+  tmrpcm.setVolume(7);
   tmrpcm.play("Interstellar.wav");
 }
 

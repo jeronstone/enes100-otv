@@ -1,11 +1,6 @@
-#include "Propulsion.h"
-#include "ArmServo.h"
-#include "MissionHelper.h"
-#include "Sensors.h"
-//#include "Enes100.h"
-
 void testing() {
-  // PUT TESTING CODE HERE
+
+  while (1);
 }
 
 // BELOW ARE PREDEFINED TESTING METHODS FOR MUCH OF THE SUBSYSTEMS
@@ -37,7 +32,7 @@ void testReed() {
 
 // tests and prints duty cycle
 void testDuty() {
-  Serial.println(sensors.readDutyCycle());
+  Serial.println("FINAL DUTY CYCLE: " + String(sensors.readDutyCycle()));
 }
 
 // tests wifi sending
