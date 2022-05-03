@@ -88,27 +88,21 @@ void Propulsion::sendMotorsRight() {
 // turns OTV to param theta
 void Propulsion::turnTo(float targetTheta) {
   float currTheta = _mission.getTheta();
-  bool swag = false;
   if (currTheta - targetTheta > 0) {
     sendMotorsRight();
   } else {
     sendMotorsLeft();
-    swag = true;
   }
   
   while (abs(currTheta - targetTheta) > thetaBuffer) {
+    _mission.sendToVS("updating theta");
     currTheta = _mission.getTheta();
     delay(30);
   }
   
   stopMotors();
+  _mission.sendToVS("turn to method done");
   delay(500);
-  
-  //if (swag) {
-  //  sendMotorsRight();
-  //  delay(500);
-  //}
-  //stopMotors();
 }
 
 // converts degrees to radians

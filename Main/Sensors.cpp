@@ -50,7 +50,9 @@ bool Sensors::dutyCircuitReady() {
   return (pulseIn(missionCircuit, HIGH) == 0); // could be a yikes
 }
 
-// returns reed cycle read
+// returns reed cycle read, "average" over 10 seconds
+// calculation returns average of VALID values
+// valid values are considered 
 float Sensors::readDutyCycle() {
   float dutyRaw[100];
   int i = 0;

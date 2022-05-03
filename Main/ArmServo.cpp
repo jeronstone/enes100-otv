@@ -6,7 +6,7 @@ Servo servo;
 const int armServoPin = 5;
 const int forward = 1200;
 const int backward = 1800;
-const int stop = 1500;
+const int stopFreq = 1500;
 
 ArmServo::ArmServo() {
 }
@@ -17,7 +17,11 @@ ArmServo::ArmServo() {
 void ArmServo::begin() {
   pinMode(armServoPin, OUTPUT);
   servo.attach(armServoPin);
-  servo.writeMicroseconds(stop);
+  servo.writeMicroseconds(stopFreq);
+}
+
+void ArmServo::end() {
+  servo.detach();
 }
 
 // runs servo in counter clock wise direction
@@ -32,19 +36,15 @@ void ArmServo::runServoCW() {
 
 // stops rotation of servo motor
 void ArmServo::stopServoRotation() {
-	servo.writeMicroseconds(stop);
+	servo.writeMicroseconds(stopFreq);
 }
 
-// runs arm servo up for param time
-void ArmServo::runArmUp(int time) {
-  runServoCCW();
+// runs arm servo down param direction for param time
+// 1: down | 0: up
+void ArmServo::runArm(bool dir, int time) {
+  begin();
+  (dir) ? runServoCW() : runServoCCW();
   delay(time);
   stopServoRotation();
-}
-
-// runs arm servo down for param town
-void ArmServo::runArmDown(int time) {
-  runServoCW();
-  delay(time);
-  stopServoRotation();
+  end();
 }
