@@ -24,7 +24,16 @@ To power our OTV, we decided to use a **[12V rechargable battery](https://www.am
 
 ### Calculations  
 
-todo
+Our current draw calculations are as follows:  
+Motors: Our calculated current draw for each motor is ~147.3 mA per motor, which is calculated based on our 18.7 Ncm operating torque. Using this torque and our 90 rpm operating speed gives us a wattage of 1.767 W, which diving by 12 and converting from A to mA gives us an operating current draw of ~147.3 mA per motor, or 294.6 mA for both motors.   
+Ultrasonic: 15 mA while operating. (Source: [link](https://randomnerdtutorials.com/complete-guide-for-ultrasonic-sensor-hc-sr04/)).  
+Reed Switch: The reed switch's current draw is negligible, and the reed switch is only operating for a small part of our mission, so we will not include this in our calculating.   
+Servo motor: The arm servo has an operating current draw of 100 mA, though it could fluctuate higher. (Source: [Manufacturers' Website](https://kookye.com/2016/01/01/kookye-servo-motor-metal-gear-360-degree-rotation/)).  
+Motorcontroller: The L298N Dual HBridge uses 36 mA for functions not related to powering the motors themselves, according to [Banana Robotics](https://www.bananarobotics.com/shop/L298N-Dual-H-Bridge-Motor-Driver).  
+WiFi Module: According to [source](https://www.instructables.com/ESP8266-Pro-Tips/#:~:text=An%20esp8266%20chip%20can%20draw,not%20be%20less%20than%20170mA.), the ESP8266 can draw up to 170 mA.  
+
+The total current draw based on all components is ~615.6 mA.
+Based on our battery's 2000mAh capacity, our OTV should be able to run for around 3.25 hours.
 
 ## Ardunio Pinouts
 
