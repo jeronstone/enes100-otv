@@ -16,7 +16,7 @@ For duty cycle detection, we will use **[brass wool](https://bluethundertechnolo
 
 <img src="/Images/servo.jpg" width="150" height="150"> <img src="/Images/ultrasonic.jpg" width="150" height="150"> <img src="/Images/reed.jpg" width="150" height="150"> <img src="/Images/motor.jpg" width="150" height="150"> <img src="/Images/motorcontrol.jpg" width="150" height="150">  
 
-## Battery/Power Details and Calculations (todo pictures)  
+## Battery/Power Details and Calculations  
 
 To power our OTV, we decided to use a **[12V rechargable battery](https://www.amazon.com/Tenergy-Capacity-Rechargeable-Replacement-Equipments/dp/B077Y9HNTF/ref=sr_1_7?crid=2S9DGJYMAKD4L&keywords=12v%2Blipo&qid=1645670114&sprefix=12v%2Blipo%2Caps%2C56&sr=8-7&th=1)**. This battery has a **[kill switch](https://www.digikey.com/en/products/detail/e-switch/RR511D1121/2116256?utm_adgroup=Essen%20Deinki&utm_source=google&utm_medium=cpc&utm_campaign=Shopping_DK%2BSupplier_Other&utm_term=&utm_content=Essen%20Deinki&gclid=CjwKCAiA1JGRBhBSEiwAxXblwUSK9cAvCC8N35mnBLSZNJDIzvzn7XprDbPOdZTN3Lrixi0Co2VLMxoCmTwQAvD_BwE)** attached. The battery has a 2000mAh capacity.    
 
@@ -27,6 +27,8 @@ To power our OTV, we decided to use a **[12V rechargable battery](https://www.am
 todo
 
 ## Ardunio Pinouts
+
+![Ardunio Pinout Chart](/Images/ARDUINOPINOUT.jpg "Ardunio Pinout Chart")  
 
 2: Propulsion: DirB 1  
 3: Ultrasonic TX  
@@ -44,8 +46,6 @@ A0: Reed Switch (read as digital input in code)
 
 **HBRIDGE**: IN1 = DirA 1; IN2 = DirA 2; IN3 = DirB 1; IN4 = DirB 2  
 OUT 1-4 to motors  
-
-![Ardunio Pinout Chart](/Images/ARDUINOPINOUT.jpg "Ardunio Pinout Chart")
 
 ## Circuit Schematic
 
