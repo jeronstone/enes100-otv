@@ -1,6 +1,20 @@
 # Interstellar OTV Electonics Subsytem 
 
-## Battery/Power Details and Calculations
+## Battery/Power Details and Calculations (todo pictures)  
+
+To power our OTV, we decided to use a 12V rechargable battery. This battery comes with a kill switch attached. The battery has a 2000mAh capacity.    
+
+### Components  
+
+We use an **Arduino UNO** to control our OTV. Along with the Arduino, we use:  
+**1x Continuous servo motor** to move our OTV's arm up and down.  
+**1x Ultrasonic sensor** to use in navigation.  
+**1x Reed switch** to detect magnetism.  
+**2x DC motors** for propulsion.  
+**1x L298N Dual HBridge Motorcontroller** to controller our 2 motors.  
+For duty cycle detection, we will use **brass wool**.  
+
+### Calculations  
 
 todo
 
