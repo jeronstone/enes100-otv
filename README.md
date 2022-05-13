@@ -33,11 +33,12 @@ Motorcontroller: The L298N Dual HBridge uses 36 mA for functions not related to 
 WiFi Module: According to [source](https://www.instructables.com/ESP8266-Pro-Tips/#:~:text=An%20esp8266%20chip%20can%20draw,not%20be%20less%20than%20170mA.), the ESP8266 can draw up to 170 mA.  
 
 The total current draw based on all components is ~615.6 mA.
-Based on our battery's 2000mAh capacity, our OTV should be able to run for around 3.25 hours.
+Based on our battery's 2000mAh capacity, our OTV should be able to run for around 3.25 hours.  
 
-### Propulsion Power Modulation
+### Power Modulation, Actuation Control  
 
-We will modulate power to our motors using a L298N Dual HBrdige motorcontroller, as stated above. This motor controller has a discharge rate to the motors of 2A, the same as our battery.
+We will modulate power to our propulsion motors using a L298N Dual HBridge motorcontroller, as stated above. This motor controller has a discharge rate to the motors of 2A, the same as our battery. The L298N will take a PWM signal from the Arduino to control the speed of the motors.
+The Arm servo's direction and speed will also be controlled using a PWN signal from the Arduino.  
 
 ## Ardunio Pinouts
 
