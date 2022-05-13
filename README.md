@@ -3,11 +3,13 @@
 ## Battery/Power Details and Calculations (todo pictures)  
 
 To power our OTV, we decided to use a **[12V rechargable battery](https://www.amazon.com/Tenergy-Capacity-Rechargeable-Replacement-Equipments/dp/B077Y9HNTF/ref=sr_1_7?crid=2S9DGJYMAKD4L&keywords=12v%2Blipo&qid=1645670114&sprefix=12v%2Blipo%2Caps%2C56&sr=8-7&th=1)**. This battery has a **[kill switch](https://www.digikey.com/en/products/detail/e-switch/RR511D1121/2116256?utm_adgroup=Essen%20Deinki&utm_source=google&utm_medium=cpc&utm_campaign=Shopping_DK%2BSupplier_Other&utm_term=&utm_content=Essen%20Deinki&gclid=CjwKCAiA1JGRBhBSEiwAxXblwUSK9cAvCC8N35mnBLSZNJDIzvzn7XprDbPOdZTN3Lrixi0Co2VLMxoCmTwQAvD_BwE)** attached. The battery has a 2000mAh capacity.    
+
 <img src="/Images/battery.jpg" width="210" height="125"> <img src="Images/killswitch.jpg" width="125" height="125">
 
 ### Components  
 
 We use an **Arduino UNO** to control our OTV.  
+
 <img src="/Images/arduino.jpg" width="150" height="150">
 
 Along with the Arduino, we use:  
