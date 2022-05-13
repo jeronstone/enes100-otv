@@ -23,9 +23,9 @@ A0: Reed Switch
 **HBRIDGE**: IN1 = DirA 1; IN2 = DirA 2; IN3 = DirB 1; IN4 = DirB 2  
 OUT 1-4 to motors  
 
-add chart too
+![Ardunio Pinout Chart](/Images/ARDUINOPINOUT.jpg "Ardunio Pinout Chart")
 
 ## Circuit Schematic
 
-todo add picture
+![OTV Circuit Schematic](/Images/circuitschem.png "OTV Circuit Schematic)
 
