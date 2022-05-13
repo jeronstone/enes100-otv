@@ -5,10 +5,13 @@ This folder contains the code that runs on the OTV's Arduino UNO.
 ## Classes  
 
 The project's code has been set up to be object oriented. Our main object classes are:  
+
 **ArmServo**, which represents the servo that lowers and raises the arm of our OTV.  
 **Propulsion**, which represents our Dual HBridge Motorcontoller.  
 **Sensors**, which represents our main senors, incuding our ultrasonic sensor, reed switch, and duty cycle reading.  
 **MissionHelper**, a wrapper for the Enes100 object. The wrapper was needed to make this project easily object oriented.  
+
+**Main.ino** is where the Arduino setup() and loop() functions are located. In that file is where all of our mission and navigation code is.
 
 ### ArmServo.cpp  
 
@@ -41,6 +44,7 @@ The main functions of **Sensors.cpp** are:
 ### MissionHelper.cpp  
 
 Wrapper for Enes100 object.  
+
 The main functions of **Sensors.cpp** are:  
 
 **bool start()**, wrapper for the Enes100.begin() function. Necessary values for the Enes100.begin() are in the wrapper itself.  
