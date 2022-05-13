@@ -18,7 +18,7 @@ float Sensors::getUltrasonic() {
   digitalWrite(ultrasonicTX, LOW);
 
   float duration = pulseIn(ultrasonicRX, HIGH);
-  return duration * 0.034 / 2.0; // could be a yikes
+  return duration * 0.034 / 2.0;
 }
 
 // returns reed value
@@ -30,50 +30,42 @@ bool Sensors::getReed() {
 // this allows for errors to be discarded
 bool Sensors::useReed() {
   int ti = millis();
-  int hc = 0;
-  int lc = 0;
-  while (millis() - ti < 10000) {
+  while (millis() - ti < 5000) {
     Serial.println(getReed());
     if (getReed()) {
-      hc++;
-    } else {
-      lc++;
+      return 1;
     }
   }
 
-  return hc > lc;
-}
-
-// returns true if duty cycle is read to be read
-// lowkey don't call this cuz this may be accounter for in read duty method later
-bool Sensors::dutyCircuitReady() {
-  return (pulseIn(missionCircuit, HIGH) == 0); // could be a yikes
+  return 0;
 }
 
 // returns reed cycle read, "average" over 10 seconds
 // calculation returns average of VALID values
 // valid values are considered 
 float Sensors::readDutyCycle() {
-  float dutyRaw[100];
+  int t = millis();
+  int size = 50;
+  float dutyRaw[size];
   int i = 0;
-  while (i < 100) {
+  while (i < size) {
     float high = pulseIn(missionCircuit, HIGH);
     float low = pulseIn(missionCircuit, LOW);
     float t = high + low;
     float val = (high / t) * 100.0;
     //return val;
-    Serial.println("VAL: " + String(val));
+    //Serial.println("VAL: " + String(val));
     if (val != 0.0 && val != 100.0 && round(val) % 10 == 0) {
-      Serial.println("VALID" + String(i));
+      //Serial.println("VALID" + String(i));
       dutyRaw[i] = val;
       i++;
     }
   }
 
   float sum;
-  for (int i = 0; i < 100; i ++) {
+  for (int i = 0; i < size; i ++) {
     sum += dutyRaw[i];
   }
 
-  return sum / 100.0;
+  return sum / (float) size;
 }

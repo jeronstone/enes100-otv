@@ -88,18 +88,24 @@ void Propulsion::sendMotorsRight() {
 // turns OTV to param theta
 void Propulsion::turnTo(float targetTheta) {
   float currTheta = _mission.getTheta();
+  //if (abs(currTheta - targetTheta) > PI / 2 ) {
+  //turnTo(0);
+  //driveBackwd();
+  // delay(550);
+  //}
+  currTheta = _mission.getTheta();
   if (currTheta - targetTheta > 0) {
     sendMotorsRight();
   } else {
     sendMotorsLeft();
   }
-  
+
   while (abs(currTheta - targetTheta) > thetaBuffer) {
     _mission.sendToVS("updating theta");
     currTheta = _mission.getTheta();
     delay(30);
   }
-  
+
   stopMotors();
   _mission.sendToVS("turn to method done");
   delay(500);

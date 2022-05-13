@@ -2,39 +2,40 @@
 #include "ArmServo.h"
 #include "MissionHelper.h"
 #include "Sensors.h"
-//#include "Enes100.h"
 
 MissionHelper mission;
 ArmServo armServo;
 Propulsion propulsion(mission);
 Sensors sensors;
 
-const double midpointY = 1.0; // 1 meter, we need to make sure this is right (enes100 library and stuff has lots of mistakes)
-const double sidePointMissionSite = 1.0; // outer edge of mission zone
-const double bottomObstacleField = 0.6; // theoretical "bottom" of obstacle field
-const double southTopEdge = 0.8; // dISTANCE BEFORE ROBOT ARM IS HOVERING OVER DATA POINT
-const double northBottomEdge = 1.2; // these are guesses :<
-const double obstacleExists = 40; // cm, theoretical value that an object exists if ultrasonic sensor value reads <= to this value
-const int timeToClearObstacleY = 250; // ms, time until the robot has cleared an obstacle in the y dir
-const int timeToClearObstacleX = 1500; // ms, time until the robot has cleared an obstacle in the x dir
-const double limboMidPoint = 1.5; // Y coord of midpoint of limbo
+const float midpointY = 1.0; // 1 meter, we need to make sure this is right (enes100 library and stuff has lots of mistakes)
+const float sidePointMissionSite = 0.84; // outer edge of mission zone
+const float bottomObstacleField = 0.4; // theoretical "bottom" of obstacle field
+const float southTopEdge = 0.8; // DISTANCE BEFORE ROBOT ARM IS HOVERING OVER DATA POINT
+const float northBottomEdge = 1.1; // these are guesses :<
+const float obstacleExists = 40; // cm, theoretical value that an object exists if ultrasonic sensor value reads <= to this value
+const int timeToClearObstacleY = 200; // ms, time until the robot has cleared an obstacle in the y dir
+const int timeToClearObstacleX = 1650; // ms, time until the robot has cleared an obstacle in the x dir
+const float limboMidPoint = 1.3; // Y coord of midpoint of limbo
 const int timeToClearLimbo = 2500; // time to clear limbo
 const int upTime = 2750;
 const int downTime = 2600;
-double dutyCycle;
-boolean magnetic;
+float dutyCycle;
+bool magnetic;
+bool doMissionArmStuff;
 
 void setup() {
   Serial.begin(9600);
   startMission(); // IF NO WIFI CONNECTION NEEDED FOR TESTING, COMMENT OUT
   //delay(10000); //testing line to delay start for uploading
   Serial.println(u8"\U0001f4aa");
+  doMissionArmStuff = 0;
 }
 
 // starts mission stuff
 void startMission() {
   while (!mission.start()) {
-    Serial.println("WIFI FAIL ...");
+    //Serial.println("WIFI FAIL ...");
   }
   mission.sendToVS("CONNECTED");
   mission.sendToVS(u8"\U0001f4aa");
@@ -52,8 +53,6 @@ void loop() { // if testing, comment out realMission() and run testing()
 }
 
 void realMission() {
-  mission.updateCurrLocation();
-  mission.sendToVS("yo");
   doMission((mission.getY() > midpointY));
   //if the y position is greater than the midpoint, then the robot is on the north side and the mission is on the south side. else, vice versa.
   mission.sendToVS("mission is done");
@@ -70,16 +69,28 @@ void realMission() {
 }
 
 void doMission(boolean robotIsNorth) { // true if north, false if south
-  String northsouth = ((robotIsNorth) ? "north" : "south");
-  mission.sendToVS("we are " + northsouth);
+  //String northsouth = ((robotIsNorth) ? "north" : "south");
+  //mission.sendToVS("we are " + northsouth);
   mission.updateCurrLocation();
-  //armServo.runArm(0, upTime);
+  //armServo.runArm(UP, upTime);
+  float slope = 0.0;
+  float theta = 0.0;
   if (robotIsNorth) {
     propulsion.turnTo(-PI / 2);
-    mission.sendToVS("we should be facing -pi/2 Clueless");
     mission.updateCurrLocation();
+    propulsion.turnTo(-PI / 2);
+    //mission.sendToVS("we should be facing -pi/2 Clueless");
+    mission.updateCurrLocation();
+    slope = (mission.getY() - 0.55) / (mission.getX() - 0.55);
+    if (slope < 0) {
+      theta = - atan(abs(slope));
+    } else {
+      theta = - (PI - atan(abs(slope)));
+    }
+    mission.updateCurrLocation();
+    propulsion.turnTo(theta);
     while (mission.getY() > southTopEdge) {   // POINT AT WHICH ARM IS HOVERING OVER MIDPOINT OF DATA EXTRACTION POINT
-      mission.sendToVS("driving to south edge!");
+      //mission.sendToVS("driving to south edge!");
       propulsion.driveFwd();
       mission.updateCurrLocation();
     }
@@ -88,38 +99,60 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
 
   } else {
     propulsion.turnTo(PI / 2);
-    mission.sendToVS("we should be facing pi/2 Clueless");
     mission.updateCurrLocation();
+    propulsion.turnTo(PI / 2);
+    //mission.sendToVS("we should be facing pi/2 Clueless");
+    mission.updateCurrLocation();
+    slope = (mission.getY() - 1.45) / (mission.getX() - 0.55);
+     if (slope < 0) {
+      theta = PI - atan(abs(slope));
+     } else {
+      theta = atan(abs(slope));
+     }
+     mission.updateCurrLocation();
+     propulsion.turnTo(theta);
     while (mission.getY() < northBottomEdge) { // POINT AT WHICH ARM IS HOVERING OVER MIDPOINT OF DATA EXTRACTION POINT
-      mission.sendToVS("driving to north edge!");
+      //mission.sendToVS("driving to north edge!");
       propulsion.driveFwd();
       mission.updateCurrLocation();
     }
     propulsion.stopMotors();
     mission.updateCurrLocation();
   }
-  mission.sendToVS("we should be at the mission site Clueless");
+  
 
-  // doing the mission stuff
-  armServo.runArm(1, downTime);
-  sensors.dutyCircuitReady();
-  float duty = sensors.readDutyCycle();
-  mission.sendDutyCycle(duty);
-  bool reed = sensors.useReed();
-  mission.sendMagnetic(reed);
-  armServo.runArm(0, upTime);
-  mission.sendToVS("now we should be done with mission sensing Clueless");
+  
+  //mission.sendToVS("we should be at the mission site Clueless");
+
+  float distance = 0.0;
+  if(robotIsNorth) {
+    distance = (sqrt(pow(mission.getX()-0.55, 2.0) + pow(mission.getY()-1.45, 2.0)));
+  } else {
+    distance = (sqrt(pow(mission.getX()-0.55, 2.00) + pow(mission.getY()-0.55, 2.0)));
+  }
+  if (doMissionArmStuff) {
+    // doing the mission stuff
+    armServo.runArm(DOWN, downTime);
+    propulsion.driveBackwd();
+    delay(100);
+    propulsion.stopMotors();
+    float duty = sensors.readDutyCycle();
+    mission.sendDutyCycle(duty);
+    bool reed = sensors.useReed();
+    mission.sendMagnetic(reed);
+    armServo.runArm(UP, upTime);
+  }
+  //mission.sendToVS("now we should be done with mission sensing Clueless");
   // navigate to center of field
   if (robotIsNorth) { // robot WAS north, and is now south
-
     while (mission.getY() < midpointY) {
-      mission.sendToVS("we should be moving towards midpointY");
+      //mission.sendToVS("we should be moving towards midpointY");
       propulsion.driveBackwd();
       mission.updateCurrLocation();
     }
   } else {          // robot WAS south, and is now north
     while (mission.getY() > midpointY) {
-      mission.sendToVS("we should be moving towards midpointY");
+      //mission.sendToVS("we should be moving towards midpointY");
       propulsion.driveBackwd();
       mission.updateCurrLocation();
     }
@@ -128,16 +161,16 @@ void doMission(boolean robotIsNorth) { // true if north, false if south
   mission.updateCurrLocation();
 
   // navigate to side edge of mission site
-  armServo.runArm(1, downTime);
+  armServo.runArm(DOWN, downTime);
   propulsion.turnTo(0);
 
-  mission.sendToVS("we should now be facing 0");
+  // mission.sendToVS("we should now be facing 0");
   mission.updateCurrLocation();
   while (mission.getX() < sidePointMissionSite) {
     propulsion.driveFwd();
     mission.updateCurrLocation();
   }
-  mission.sendToVS("we should now be ready for nav (at the sidepointmissionsite");
+  //mission.sendToVS("we should now be ready for nav (at the sidepointmissionsite");
   propulsion.stopMotors();
   mission.updateCurrLocation();
 
@@ -180,7 +213,7 @@ void findHole() {
 void clearLimbo() {
   propulsion.turnTo(PI / 2);
   mission.updateCurrLocation();
-  while (mission.getY() < limboMidPoint) {
+  while (mission.getY() < (limboMidPoint)) {
     propulsion.driveFwd();
     mission.updateCurrLocation();
   }
@@ -200,7 +233,7 @@ void finish() {
 }
 
 void testing() {
-  armServo.runArm(0, 200);
+  armServo.runArm(UP, upTime);
   while (1);
 }
 
@@ -267,9 +300,9 @@ void testProp() {
 // tests servo going up and down
 void testServo() {
   Serial.println("swag");
-  armServo.runArm(0, 2000);
+  armServo.runArm(UP, 2000);
   delay(3000);
-  armServo.runArm(1, 200);
+  armServo.runArm(DOWN, 200);
   delay(3000);
 }
 

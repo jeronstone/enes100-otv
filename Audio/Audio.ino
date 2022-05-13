@@ -9,15 +9,22 @@ void setup()
 {
   tmrpcm.speakerPin = 9;
   Serial.begin(9600);
-  while (!Serial);
+  //while (!Serial);
   if (!SD.begin(SD_ChipSelectPin))
   {
     Serial.println("SD fail");
     return;
   }
   Serial.println("SUCCESS");
-  tmrpcm.setVolume(7);
-  tmrpcm.play("Interstellar.wav");
+  tmrpcm.setVolume(5);
+  tmrpcm.play((char*)"audio.WAV", 60);
+  while(1) {
+    if (tmrpcm.isPlaying()) {
+      Serial.println("PLAYING...");
+    } else {
+      Serial.println("NOT PLAYING...");
+    }
+  }
 }
 
 void loop() {

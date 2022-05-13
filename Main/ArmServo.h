@@ -4,6 +4,9 @@
 #include "Arduino.h"
 #include "Servo.h"
 
+#define DOWN 1
+#define UP 0
+
 class ArmServo
 {
   public:
