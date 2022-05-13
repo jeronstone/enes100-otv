@@ -1,4 +1,4 @@
-# Interstellar OTV Electronics Subsytem 
+# Interstellar OTV Electronics Subsystem 
 
 ## Components
 
