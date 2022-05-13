@@ -1,6 +1,6 @@
 # Interstellar OTV Electonics Subsytem 
 
-## Battery and Power Details and Calculations
+## Battery/Power Details and Calculations
 
 todo
 
@@ -18,7 +18,7 @@ todo
 11: Propulsion: ENB  
 12: DutyCycle  
 13: Propulsion: DirB 2  
-A0: Reed Switch  
+A0: Reed Switch (read as digital input in code)  
 
 **HBRIDGE**: IN1 = DirA 1; IN2 = DirA 2; IN3 = DirB 1; IN4 = DirB 2  
 OUT 1-4 to motors  
