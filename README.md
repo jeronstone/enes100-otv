@@ -27,5 +27,5 @@ OUT 1-4 to motors
 
 ## Circuit Schematic
 
-![OTV Circuit Schematic](/Images/circuitschem.png "OTV Circuit Schematic)
+![OTV Circuit Schematic](/Images/circuitschem.png "OTV Circuit Schematic")
 
