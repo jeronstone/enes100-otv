@@ -2,17 +2,23 @@
 
 ## Battery/Power Details and Calculations (todo pictures)  
 
-To power our OTV, we decided to use a 12V rechargable battery. This battery comes with a kill switch attached. The battery has a 2000mAh capacity.    
+To power our OTV, we decided to use a **[12V rechargable battery](https://www.amazon.com/Tenergy-Capacity-Rechargeable-Replacement-Equipments/dp/B077Y9HNTF/ref=sr_1_7?crid=2S9DGJYMAKD4L&keywords=12v%2Blipo&qid=1645670114&sprefix=12v%2Blipo%2Caps%2C56&sr=8-7&th=1)**. This battery has a **[kill switch](https://www.digikey.com/en/products/detail/e-switch/RR511D1121/2116256?utm_adgroup=Essen%20Deinki&utm_source=google&utm_medium=cpc&utm_campaign=Shopping_DK%2BSupplier_Other&utm_term=&utm_content=Essen%20Deinki&gclid=CjwKCAiA1JGRBhBSEiwAxXblwUSK9cAvCC8N35mnBLSZNJDIzvzn7XprDbPOdZTN3Lrixi0Co2VLMxoCmTwQAvD_BwE)** attached. The battery has a 2000mAh capacity.    
+![Battery](/Images/battery.jpg "12V Rechargable Battery") ![killswitch](Images/killswitch.jpg "Kill Switch")  
 
 ### Components  
 
-We use an **Arduino UNO** to control our OTV. Along with the Arduino, we use:  
-**1x Continuous servo motor** to move our OTV's arm up and down.  
-**1x Ultrasonic sensor** to use in navigation.  
-**1x Reed switch** to detect magnetism.  
-**2x DC motors** for propulsion.  
-**1x L298N Dual HBridge Motorcontroller** to controller our 2 motors.  
-For duty cycle detection, we will use **brass wool**.  
+We use an **Arduino UNO** to control our OTV.  
+![Arduino](/Images/arduino.jpg "Arduino")  
+
+Along with the Arduino, we use:  
+**[1x Continuous servo motor](https://www.amazon.com/KOOKYE-360-Continuous-Rotation-Helicopter/dp/B019TOJPO4/ref=sr_1_7?crid=14QX980APVMMI&keywords=continuous%2Bservo%2Bmotor%2Barduino&qid=1647354622&sprefix=continuous%2Bservo%2Bm%2Caps%2C61&sr=8-7&th=1)** move our OTV's arm up and down.  
+**[1x Ultrasonic sensor](https://www.amazon.com/HC-SR04-Ultrasonic-Distance-Measuring-MEGA2560/dp/B088BT8CDW/ref=asc_df_B088BT8CDW/?tag=hyprod-20&linkCode=df0&hvadid=533439785942&hvpos=&hvnetw=g&hvrand=4127217943768751677&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9007733&hvtargid=pla-1434560118174&psc=1)** to use in navigation.  
+**[1x Reed switch](https://www.amazon.com/Magnetron-MagSwitch-Arduino-Digital-3-3V-5V/dp/B07MD9GFXN)** to detect magnetism.  
+**[2x 12V DC motors](https://www.pololu.com/product/3491/specs)** for propulsion.  
+**[1x L298N Dual HBridge Motorcontroller](https://www.amazon.com/Qunqi-2Packs-Controller-Stepper-Arduino/dp/B01M29YK5U)** to controller our 2 motors.  
+For duty cycle detection, we will use **[brass wool](https://bluethundertechnologies.com/product/jbc-cl6210-brass-wool/)**.  
+
+![Servo](/Images/servo.jpg "Servo") ![Ultrasonic](/Images/ultrasonic.jpg "Ultrasonic") ![Reed](/Images/reed.jpg "Reed Switch Module") ![Motor](/Images/motor.jpg "12V DC Motor") ![HB](/Images/motorcontrol.jpg "Dual HBridge Motorcontroller") ![brass wool](/Images/brass.jpg "Brass Wool")  
 
 ### Calculations  
 
