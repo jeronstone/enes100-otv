@@ -1,4 +1,4 @@
-# Interstellar OTV Electonics Subsytem 
+# Interstellar OTV Electronics Subsytem 
 
 ## Components
 
@@ -38,24 +38,24 @@ Based on our battery's 2000mAh capacity, our OTV should be able to run for aroun
 ### Power Modulation, Actuation Control  
 
 We will modulate power to our propulsion motors using a L298N Dual HBridge motorcontroller, as stated above. This motor controller has a discharge rate to the motors of 2A, the same as our battery. The L298N will take a PWM signal from the Arduino to control the speed of the motors.
-The Arm servo's direction and speed will also be controlled using a PWN signal from the Arduino.  
+The arm servo's direction and speed will also be controlled using a PWN signal from the Arduino.  
 
 ## Ardunio Pinouts
 
 ![Ardunio Pinout Chart](/Images/ARDUINOPINOUT.jpg "Ardunio Pinout Chart")  
 
-2: Propulsion: DirB 1  
+2: Propulsion: Direction B 1  
 3: Ultrasonic TX  
 4: Ultrasonic RX  
 5: Arm Servo Signal  
-6: Propulsion: DirA 2  
-7: Propulsion: DirA 1  
+6: Propulsion: Direction A 2  
+7: Propulsion: Direction A 1  
 8: WiFi RX  
 9: WiFi TX  
 10: Propulsion: ENA   
 11: Propulsion: ENB  
-12: DutyCycle  
-13: Propulsion: DirB 2  
+12: Duty Cycle  
+13: Propulsion: Direction B 2  
 A0: Reed Switch (read as digital input in code)  
 
 **HBRIDGE**: IN1 = DirA 1; IN2 = DirA 2; IN3 = DirB 1; IN4 = DirB 2  
@@ -65,12 +65,12 @@ OUT 1-4 to motors
 
 ![OTV Circuit Schematic](/Images/circuitschem.png "OTV Circuit Schematic")
 
-Battery is connected to breadboard, creating a 12V rail. Ardunio Vin will connect to this rail. Other breadboard rail will be 5V from Ardunio 5V.  
+The battery is connected to the breadboard, creating a 12V rail. Ardunio Vin will connect to this rail. The other breadboard rail will be 5V from Ardunio's 5V out.  
 
 **The sensors/actuators connect to the rails as follows:**  
-Ultrasonic Sensor to 5V rail  
-Arm Servo to 5V rail  
-WiFi module to 5V rail  
-Reed Switch Module to 5V rail  
-Dual HBridge Motorcontroller to 12V rail  
+Ultrasonic Sensor to 5V rail.  
+Arm Servo to 5V rail.  
+WiFi module to 5V rail.  
+Reed Switch Module to 5V rail.  
+Dual HBridge Motorcontroller to 12V rail.  
 All of these components will also be connected to (any) ground rail.
